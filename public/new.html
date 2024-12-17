@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>새 글 작성</title>
+</head>
+<body>
+    <h1>새 글 작성</h1>
+    <form action="/new" method="POST" enctype="multipart/form-data">
+        <label>제목: <input type="text" name="title" required></label><br>
+        <label>내용: <textarea name="content" required></textarea></label><br>
+        <label>이미지: <input type="file" name="image"></label><br>
+        <button type="submit">작성</button>
+    </form>
+    <a href="/board">게시판으로 이동</a>
+</body>
+</html>

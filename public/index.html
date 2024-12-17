@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈페이지</title>
+    <link rel="stylesheet" href="/styles.css">  <!-- 스타일링을 위한 CSS 파일 연결 -->
+</head>
+<body>
+    <h1>홈페이지</h1>
+    
+    <!-- 오른쪽 상단 텍스트 -->
+    <div class="profile-info">
+        <span>컴퓨터학부 20201864 유지훈</span>
+    </div>
+    
+    <a id="loginButton" href="/login" style="display:none;">로그인</a>
+    <a id="profileButton" href="/profile" style="display:none;">프로필</a>
+    <a href="/account">회원가입</a>
+    <a href="/board">게시판</a>
+
+    <script>
+        // 로그인 상태 확인
+        fetch('/api/check-login')
+            .then(response => response.json())
+            .then(data => {
+                if (data.loggedIn) {
+                    // 로그인 상태에서 프로필 버튼 표시, 로그인 버튼 숨기기
+                    document.getElementById('profileButton').style.display = 'inline';
+                } else {
+                    // 로그인 안 된 상태에서 로그인 버튼 표시, 프로필 버튼 숨기기
+                    document.getElementById('loginButton').style.display = 'inline';
+                }
+            });
+    </script>
+</body>
+</html>

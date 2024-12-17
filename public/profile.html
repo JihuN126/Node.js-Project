@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필</title>
+</head>
+<body>
+    <h1>프로필</h1>
+    <p>로그인한 사용자: <span id="username"></span></p>
+    <p>작성한 게시글 개수: <span id="postCount"></span></p>
+    <ul id="postList"></ul>
+    <a href="/board">게시판으로 이동</a>
+    <a href="/">홈으로 이동</a>
+
+    <script>
+        fetch('/api/profile')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('username').textContent = data.username;
+                document.getElementById('postCount').textContent = data.postCount;
+                document.getElementById('postList').innerHTML = data.posts
+                    .map(post => `<li><a href="/post/${post.id}">${post.title}</a></li>`)
+                    .join('');
+            });
+    </script>
+</body>
+</html>

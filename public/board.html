@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+</head>
+<body>
+    <h1>게시판</h1>
+
+    <!-- 검색 폼 추가 -->
+    <form id="searchForm">
+        <input type="text" id="searchQuery" placeholder="검색어 입력" required>
+        <button type="submit">검색</button>
+    </form>
+
+    <!-- 게시글 목록 -->
+    <ul id="posts"></ul>
+    <a href="/new">새 글 작성</a>
+    <a href="/">홈으로 이동</a>
+
+    <script>
+        // 게시글 목록 불러오기
+        function loadPosts(query = '') {
+            const url = query ? `/api/search?query=${query}` : '/api/posts';  // 검색어가 있으면 검색 API 호출
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const postsList = document.getElementById('posts');
+                    postsList.innerHTML = data
+                        .map(post => `
+                            <li>
+                                <a href="/post/${post.id}">${post.title} - 작성자: ${post.author}</a>
+                                <a href="/edit/${post.id}">편집</a>
+                            </li>
+                        `)
+                        .join('');
+                });
+        }
+
+        // 페이지 로드 시 게시글 목록 불러오기
+        loadPosts();
+
+        // 검색 기능
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = document.getElementById('searchQuery').value;  // 검색어 가져오기
+            loadPosts(query);  // 검색어로 게시글 목록 불러오기
+        });
+
+        // 게시글 삭제 기능
+        function deletePost(postId) {
+            const confirmation = confirm("정말 삭제하시겠습니까?");
+            if (confirmation) {
+                fetch(`/delete/${postId}`, { method: 'GET' })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("게시글이 삭제되었습니다.");
+                            loadPosts(); // 삭제 후 게시글 목록 갱신
+                        } else {
+                            alert("삭제 중 오류가 발생했습니다.");
+                        }
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

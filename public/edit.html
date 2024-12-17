@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 수정</title>
+</head>
+<body>
+    <h1>게시글 수정</h1>
+    <form action="/edit/{{post.id}}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="postId" id="postId">
+        <label>제목: <input type="text" name="title" id="title" required></label><br>
+        <label>내용: <textarea name="content" id="content" required></textarea></label><br>
+        <label>사진: <input type="file" name="image" id="image"></label><br>
+        <div id="currentImage"></div> <!-- 이미지를 미리보기 위한 div -->
+        <button type="submit">수정</button>
+    </form>
+    <a href="/board">게시판으로 돌아가기</a>
+
+    <script>
+        // 게시글 ID에 해당하는 게시글 데이터를 불러와서 수정 폼에 채운다.
+        const postId = new URLSearchParams(window.location.search).get('id');
+        if (postId) {
+            fetch(`/api/posts/${postId}`)
+                .then(response => response.json())
+                .then(post => {
+                    document.getElementById('postId').value = post.id;
+                    document.getElementById('title').value = post.title;
+                    document.getElementById('content').value = post.content;
+
+                    // 현재 이미지가 있다면 미리보기 표시
+                    if (post.image) {
+                        console.log('image');
+                        document.getElementById('currentImage').innerHTML = `<img src="/uploads/${post.image}" alt="현재 이미지" width="30" />`;
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
